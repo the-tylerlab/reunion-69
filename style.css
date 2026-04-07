@@ -177,6 +177,14 @@ body {
     display: block;
 }
 
+.registration-grid.active {
+    display: grid !important;
+}
+
+.wheel-dashboard.active {
+    display: grid !important;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -187,6 +195,12 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
+}
+
+@media (max-width: 600px) {
+    .registration-grid, .wheel-dashboard {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 .wheel-main-title {
