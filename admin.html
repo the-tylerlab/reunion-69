@@ -151,8 +151,9 @@
                 margin-bottom: 15px !important; 
             }
             #password-confirm-btn, #password-cancel-btn {
-                padding: 8px 15px !important;
+                padding: 0 !important;
                 font-size: 0.9rem !important;
+                height: 40px !important; /* Slightly smaller height for mobile */
             }
         }
     </style>
@@ -213,9 +214,9 @@
             <h3 style="margin-top:0; color: #333;"><i class="fa-solid fa-lock"></i> ยืนยันสิทธิ์ Admin</h3>
             <p id="password-modal-msg" style="margin-bottom: 20px; color: #666; font-size: 1.1rem;">กรุณาใส่รหัสผ่าน</p>
             <input type="password" id="password-input" placeholder="***" style="width: 100%; padding: 12px; margin-bottom: 25px; text-align: center; font-size: 1.5rem; letter-spacing: 5px; border-radius: 8px; border: 2px solid #e2e8f0; outline: none; transition: border-color 0.2s;">
-            <div style="display: flex; gap: 15px; justify-content: center;">
-                <button id="password-cancel-btn" style="padding: 10px 25px; background: #e2e8f0; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; color: #475569; font-weight: 500;">ยกเลิก</button>
-                <button id="password-confirm-btn" class="btn-danger" style="padding: 10px 25px; border-radius: 8px; font-size: 1rem;">ยืนยัน</button>
+            <div style="display: flex; gap: 10px; justify-content: center; width: 100%;">
+                <button id="password-cancel-btn" style="flex: 1; padding: 10px; background: #e2e8f0; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; color: #475569; font-weight: 500; height: 45px; display: flex; align-items: center; justify-content: center;">ยกเลิก</button>
+                <button id="password-confirm-btn" class="btn-danger" style="flex: 1; padding: 10px; border-radius: 8px; font-size: 1rem; height: 45px; display: flex; align-items: center; justify-content: center;">ยืนยัน</button>
             </div>
         </div>
     </div>
