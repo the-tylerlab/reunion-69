@@ -1,4 +1,15 @@
-const socket = io();
+const firebaseConfig = {
+  apiKey: "AIzaSyArUTuBsE0K6HN-_X84pV3AspkJ31Llux8",
+  authDomain: "reunion-69.firebaseapp.com",
+  databaseURL: "https://reunion-69-default-rtdb.firebaseio.com",
+  projectId: "reunion-69",
+  storageBucket: "reunion-69.firebasestorage.app",
+  messagingSenderId: "9929222848",
+  appId: "1:9929222848:web:40bee69a0baed362a05b25"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
 const adminPanel = document.getElementById('admin-panel');
 const participantsTbody = document.getElementById('admin-participants-table');
@@ -60,7 +71,11 @@ window.onload = () => {
 };
 
 // Listen to data from server
-socket.on('sync_data', (appData) => {
+db.ref('/').on('value', (snapshot) => {
+    let appData = snapshot.val();
+    if (!appData) appData = { participants: [], winners: [] };
+    if (!appData.participants) appData.participants = [];
+    if (!appData.winners) appData.winners = [];
     renderAdminTables(appData);
 });
 
@@ -103,7 +118,16 @@ function renderAdminTables(data) {
 
 window.adminRemove = function(id) {
     if(confirm('⚠️ คุณแน่ใจหรือไม่ที่จะลบรายชื่อนี้? ข้อมูลจะถูกลบออกจากระบบและทุกหน้าจอทันที')) {
-        socket.emit('remove_participant', id);
+        db.ref('/').transaction((data) => {
+            let currentData = data || { participants: [], winners: [] };
+            if (currentData.participants) {
+                currentData.participants = currentData.participants.filter(p => p.id !== id);
+            }
+            if (currentData.winners) {
+                currentData.winners = currentData.winners.filter(w => w.id !== id);
+            }
+            return currentData;
+        });
     }
 };
 
@@ -112,7 +136,7 @@ if (clearDataBtn) {
         askPassword('🛑 พิมพ์รหัสผ่านอีกครั้งเพื่อยืนยันการล้างข้อมูลทั้งหมด (admin69):', (confirmPwd) => {
             if (confirmPwd === 'admin69') {
                 if(confirm('🚨 การกระทำนี้ไม่สามารถย้อนกลับได้! คุณแน่ใจหรือไม่ที่จะล้างฐานข้อมูลผู้ร่วมงานทั้งหมด?')) {
-                    socket.emit('clear_data');
+                    db.ref('/').set({ participants: [], winners: [] });
                 }
             } else {
                 if (confirmPwd !== null) alert('รหัสผ่านไม่ถูกต้อง ล้มเหลว');

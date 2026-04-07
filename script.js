@@ -1,13 +1,33 @@
 // State Management
-const socket = io();
+const firebaseConfig = {
+  apiKey: "AIzaSyArUTuBsE0K6HN-_X84pV3AspkJ31Llux8",
+  authDomain: "reunion-69.firebaseapp.com",
+  databaseURL: "https://reunion-69-default-rtdb.firebaseio.com",
+  projectId: "reunion-69",
+  storageBucket: "reunion-69.firebasestorage.app",
+  messagingSenderId: "9929222848",
+  appId: "1:9929222848:web:40bee69a0baed362a05b25"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 let appData = {
     participants: [],
     winners: []
 };
 
 // Listen to server for data sync
-socket.on('sync_data', (serverData) => {
-    appData = serverData;
+db.ref('/').on('value', (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+        appData = {
+            participants: data.participants || [],
+            winners: data.winners || []
+        };
+    } else {
+        appData = { participants: [], winners: [] };
+    }
     renderLists();
     if (canvas) drawWheel();
 });
@@ -107,8 +127,13 @@ function init() {
                 won: false
             };
             
-            // Send to server instead of local storage
-            socket.emit('add_participant', newParticipant);
+            // Send to Firebase instead of local storage
+            db.ref('/').transaction((data) => {
+                let currentData = data || { participants: [], winners: [] };
+                if (!currentData.participants) currentData.participants = [];
+                currentData.participants.push(newParticipant);
+                return currentData;
+            });
             
             form.reset();
             document.getElementById('name').focus();
@@ -359,8 +384,18 @@ function determineWinner() {
     if (winner) {
         showWinnerModal(winner);
         
-        // Send winner to server
-        socket.emit('set_winner', winner.id);
+        db.ref('/').transaction((data) => {
+            let currentData = data || { participants: [], winners: [] };
+            if (!currentData.participants) currentData.participants = [];
+            if (!currentData.winners) currentData.winners = [];
+            
+            const pIndex = currentData.participants.findIndex(p => p.id === winner.id);
+            if (pIndex !== -1) {
+                currentData.participants[pIndex].won = true;
+                currentData.winners.push(currentData.participants[pIndex]);
+            }
+            return currentData;
+        });
     }
 }
 
