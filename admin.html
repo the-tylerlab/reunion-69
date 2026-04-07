@@ -35,7 +35,7 @@
             line-height: 1.2;
         }
         .admin-header h2 i { font-size: 0.9em; margin-right: 10px; }
-        .admin-header h2 span { font-size: 0.6em; font-weight: 500; display: block; margin-top: 5px; color: var(--secondary-dark); opacity: 1; }
+        .admin-header h2 span { font-size: 0.6em; font-weight: 500; display: block; margin-top: 5px; color: var(--primary-dark); opacity: 0.8; }
 
         .sticky-wrapper {
             position: sticky;
@@ -63,6 +63,15 @@
         }
         .stat-label { font-size: 0.9rem; color: #64748b; display: block; margin-bottom: 5px; }
         .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--primary-dark); display: block; }
+
+        .data-tables h3 {
+            position: sticky;
+            top: 180px; /* Approximate height of sticky-wrapper */
+            background: white;
+            padding: 10px 0;
+            z-index: 10;
+            margin: 0;
+        }
 
         .data-tables {
             display: grid;
@@ -176,6 +185,8 @@
             .stat-value { font-size: 1.8rem; }
             .stat-card:last-child { min-width: 100%; }
             
+            .data-tables h3 { top: 180px; } /* Update sticky top for mobile */
+            
             #admin-clear-data {
                 padding: 10px 15px;
                 font-size: 0.85rem;
@@ -264,7 +275,7 @@
 
             <!-- All Participants -->
             <div>
-                <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">👥 ผู้เข้าร่วมงานทั้งหมด (<span id="admin-total-count">0</span>)</h3>
+                <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">👥 ผู้เข้าร่วมงานทั้งหมด</h3>
                 <div class="table-container">
                     <table style="margin-top:0;">
                         <thead>
@@ -291,7 +302,8 @@
 
             <!-- Winners -->
             <div>
-                <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">🏆 ผู้รับรางวัลแล้ว (<span id="admin-winner-count">0</span>)</h3>
+                <h2 style="display:none;"><span id="admin-total-count">0</span><span id="admin-winner-count">0</span></h2> <!-- Hidden but kept for JS compatibility -->
+                <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">🏆 ผู้รับรางวัลแล้ว</h3>
                 <table>
                     <thead>
                         <tr>
