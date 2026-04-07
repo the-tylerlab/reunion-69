@@ -35,7 +35,7 @@
             line-height: 1.2;
         }
         .admin-header h2 i { font-size: 0.9em; margin-right: 10px; }
-        .admin-header h2 span { font-size: 0.5em; display: block; margin-top: 5px; }
+        .admin-header h2 span { font-size: 0.6em; font-weight: 500; display: block; margin-top: 5px; color: var(--secondary-dark); opacity: 1; }
 
         .sticky-wrapper {
             position: sticky;
@@ -108,12 +108,13 @@
             background: #e74c3c;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
             cursor: pointer;
             font-family: inherit;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.2s;
+            font-size: 1rem;
         }
         .btn-danger:hover {
             background: #c0392b;
@@ -168,12 +169,19 @@
             th:nth-child(5), td:nth-child(5) { width: 16%; text-align: center; } /* Action */
             
             .admin-header h2 { font-size: 1.5rem; }
-            .admin-header h2 span { font-size: 0.6em; }
+            .admin-header h2 span { font-size: 0.75em; }
             .sticky-wrapper { padding: 15px; margin: -10px -15px 20px; top: -10px; }
             .stats-summary { gap: 10px; flex-wrap: wrap; }
             .stat-card { padding: 10px; min-width: calc(50% - 5px); }
             .stat-value { font-size: 1.8rem; }
             .stat-card:last-child { min-width: 100%; }
+            
+            #admin-clear-data {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+            .pagination-container { gap: 10px; }
+            .btn-page { padding: 6px 12px; font-size: 0.8rem; }
             .modal-content {
                 padding: 20px !important;
                 max-width: 300px !important;
@@ -191,6 +199,36 @@
                 height: 40px !important; /* Slightly smaller height for mobile */
             }
         }
+
+        .pagination-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+        #admin-page-info {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .btn-page {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #475569;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .btn-page:hover:not(:disabled) { background: #f8fafc; border-color: #cbd5e1; }
+        .btn-page:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
     </style>
 </head>
 <body>
@@ -227,20 +265,28 @@
             <!-- All Participants -->
             <div>
                 <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">👥 ผู้เข้าร่วมงานทั้งหมด (<span id="admin-total-count">0</span>)</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ชื่อ-นามสกุล</th>
-                            <th>สายตระกูล</th>
-                            <th>เบอร์โทร</th>
-                            <th>สถานะ</th>
-                            <th>จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-participants-table">
-                        <!-- Rendered by JS -->
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table style="margin-top:0;">
+                        <thead>
+                            <tr>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>สายตระกูล</th>
+                                <th class="mobile-hide">เบอร์โทร</th>
+                                <th>สถานะ</th>
+                                <th>จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-participants-table">
+                            <!-- จะเเสดงผลผ่าน JS -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination-container">
+                    <button id="admin-prev-page" class="btn-page" disabled><i class="fa-solid fa-chevron-left" style="font-size:0.7em;"></i> ก่อนหน้า</button>
+                    <span id="admin-page-info">หน้า 1 / 1</span>
+                    <button id="admin-next-page" class="btn-page" disabled>ถัดไป <i class="fa-solid fa-chevron-right" style="font-size:0.7em;"></i></button>
+                </div>
             </div>
 
             <!-- Winners -->

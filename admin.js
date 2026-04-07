@@ -18,6 +18,10 @@ const totalCountSpan = document.getElementById('admin-total-count');
 const winnerCountSpan = document.getElementById('admin-winner-count');
 const clearDataBtn = document.getElementById('admin-clear-data');
 
+let currentPage = 1;
+const itemsPerPage = 5;
+let lastAppData = { participants: [], winners: [] };
+
 // Password Modal Helper
 function askPassword(msg, callback) {
     const modal = document.getElementById('password-modal');
@@ -76,13 +80,30 @@ db.ref('/').on('value', (snapshot) => {
     if (!appData) appData = { participants: [], winners: [] };
     if (!appData.participants) appData.participants = [];
     if (!appData.winners) appData.winners = [];
+    lastAppData = appData; // Store globally for pagination
     renderAdminTables(appData);
 });
 
 function renderAdminTables(data) {
-    // Render Participants
+    // Pagination Calculations
+    const totalParticipants = data.participants.length;
+    const totalPages = Math.ceil(totalParticipants / itemsPerPage) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const pageInfo = document.getElementById('admin-page-info');
+    const prevBtn = document.getElementById('admin-prev-page');
+    const nextBtn = document.getElementById('admin-next-page');
+
+    if (pageInfo) pageInfo.textContent = `หน้า ${currentPage} / ${totalPages}`;
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+
+    // Render Participants (Sliced for pagination)
     participantsTbody.innerHTML = '';
-    data.participants.forEach(p => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const pagedParticipants = data.participants.slice(startIndex, startIndex + itemsPerPage);
+
+    pagedParticipants.forEach(p => {
         const tr = document.createElement('tr');
         const statusBadge = p.won 
             ? '<span class="badge badge-won" title="ได้รางวัลแล้ว">✅</span>' 
@@ -91,7 +112,7 @@ function renderAdminTables(data) {
         tr.innerHTML = `
             <td><strong>${p.name}</strong></td>
             <td>${p.familyLine}</td>
-            <td>${p.phone || '-'}</td>
+            <td class="mobile-hide">${p.phone || '-'}</td>
             <td>${statusBadge}</td>
             <td>
                 <button class="btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="adminRemove('${p.id}')">
@@ -145,14 +166,30 @@ window.adminRemove = function(id) {
 
 if (clearDataBtn) {
     clearDataBtn.addEventListener('click', () => {
-        askPassword('🛑 พิมพ์รหัสผ่านอีกครั้งเพื่อยืนยันการล้างข้อมูลทั้งหมด (admin69):', (confirmPwd) => {
-            if (confirmPwd === 'admin69') {
-                if(confirm('🚨 การกระทำนี้ไม่สามารถย้อนกลับได้! คุณแน่ใจหรือไม่ที่จะล้างฐานข้อมูลผู้ร่วมงานทั้งหมด?')) {
+        askPassword('⚠️ คำเตือน: คุณกำลังจะล้างข้อมูลทั้งหมดในระบบ! กรุณาใส่รหัสผ่านเพื่อยืนยัน:', (pwd) => {
+            if (pwd === 'admin69') {
+                if (confirm('‼️ ยืนยันอีกครั้ง: ข้อมูลการลงทะเบียนและรายชื่อผู้โชคดีทั้งหมดจะหายไปถาวร?')) {
                     db.ref('/').set({ participants: [], winners: [] });
                 }
-            } else {
-                if (confirmPwd !== null) alert('รหัสผ่านไม่ถูกต้อง ล้มเหลว');
+            } else if (pwd !== null) {
+                alert('❌ รหัสผ่านไม่ถูกต้อง');
             }
         });
     });
 }
+
+// Pagination Event Listeners
+document.getElementById('admin-prev-page')?.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        renderAdminTables(lastAppData);
+    }
+});
+
+document.getElementById('admin-next-page')?.addEventListener('click', () => {
+    const totalPages = Math.ceil(lastAppData.participants.length / itemsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderAdminTables(lastAppData);
+    }
+});

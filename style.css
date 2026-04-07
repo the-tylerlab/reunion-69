@@ -222,7 +222,8 @@ body {
 
 .wheel-main-title {
     font-size: clamp(1.8rem, 6vw, 3.5rem); 
-    margin-top: 0px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     color: var(--secondary-dark);
 }
 
