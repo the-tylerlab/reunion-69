@@ -89,11 +89,12 @@
             transform: translateY(-2px);
         }
         .badge {
-            padding: 6px 12px;
+            padding: 4px 8px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             display: inline-block;
+            line-height: 1;
         }
         .badge-won { background: #f1c40f; color: #fff; }
         .badge-pending { background: #3498db; color: #fff; }
@@ -103,18 +104,41 @@
             body { padding: 10px; }
             .admin-container { padding: 15px; }
             th, td { 
-                padding: 6px 3px; 
-                font-size: 0.68rem; 
+                padding: 5px 2px; 
+                font-size: 0.65rem; 
+            }
+            .badge {
+                padding: 3px 5px;
+                font-size: 0.7rem;
             }
             /* Column width control for mobile */
-            th:nth-child(1), td:nth-child(1) { width: 35%; } /* Name */
-            th:nth-child(2), td:nth-child(2) { width: 25%; } /* Family */
-            th:nth-child(3), td:nth-child(3) { width: 15%; } /* Phone */
-            th:nth-child(4), td:nth-child(4) { width: 10%; text-align: center; } /* Status */
-            th:nth-child(5), td:nth-child(5) { width: 15%; text-align: center; } /* Action */
+            th:nth-child(1), td:nth-child(1) { width: 32%; } /* Name */
+            th:nth-child(2), td:nth-child(2) { width: 22%; } /* Family */
+            th:nth-child(3), td:nth-child(3) { width: 17%; } /* Phone */
+            th:nth-child(4), td:nth-child(4) { width: 12%; text-align: center; } /* Status */
+            th:nth-child(5), td:nth-child(5) { width: 17%; text-align: center; } /* Action */
             
-            .btn-danger { padding: 5px 8px; font-size: 0.7rem; }
-            .admin-header h2 { font-size: 1.1rem; }
+            .btn-danger { padding: 4px 6px; font-size: 0.65rem; }
+            .btn-danger i { font-size: 0.6rem; }
+            
+            .admin-header h2 { font-size: 1rem; }
+            
+            /* Smaller Password Modal for mobile */
+            .modal-content {
+                padding: 20px !important;
+                max-width: 300px !important;
+            }
+            .modal-content h3 { font-size: 1.1rem !important; }
+            .modal-content p { font-size: 0.9rem !important; margin-bottom: 15px !important; }
+            #password-input { 
+                padding: 8px !important; 
+                font-size: 1.2rem !important; 
+                margin-bottom: 15px !important; 
+            }
+            #password-confirm-btn, #password-cancel-btn {
+                padding: 8px 15px !important;
+                font-size: 0.9rem !important;
+            }
         }
     </style>
 </head>
