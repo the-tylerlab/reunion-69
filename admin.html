@@ -107,19 +107,34 @@
                 padding: 5px 2px; 
                 font-size: 0.65rem; 
             }
+            /* Align Badge (Blue) and Button (Red) to be equal size */
             .badge {
-                padding: 3px 5px;
-                font-size: 0.7rem;
+                padding: 4px 8px; /* Balanced padding */
+                font-size: 0.65rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 32px;
+                height: 22px;
             }
+            .btn-danger { 
+                padding: 4px 8px; 
+                font-size: 0.65rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 22px;
+                min-width: 32px;
+                border-radius: 20px; /* Make button more rounded like the badge */
+            }
+            .btn-danger i { font-size: 0.6rem; margin-right: 2px; }
+            
             /* Column width control for mobile */
             th:nth-child(1), td:nth-child(1) { width: 32%; } /* Name */
             th:nth-child(2), td:nth-child(2) { width: 22%; } /* Family */
             th:nth-child(3), td:nth-child(3) { width: 17%; } /* Phone */
-            th:nth-child(4), td:nth-child(4) { width: 12%; text-align: center; } /* Status */
-            th:nth-child(5), td:nth-child(5) { width: 17%; text-align: center; } /* Action */
-            
-            .btn-danger { padding: 4px 6px; font-size: 0.65rem; }
-            .btn-danger i { font-size: 0.6rem; }
+            th:nth-child(4), td:nth-child(4) { width: 13%; text-align: center; } /* Status */
+            th:nth-child(5), td:nth-child(5) { width: 16%; text-align: center; } /* Action */
             
             .admin-header h2 { font-size: 1rem; }
             
