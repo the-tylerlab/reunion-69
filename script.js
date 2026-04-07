@@ -328,14 +328,7 @@ if (spinBtn) {
     spinBtn.addEventListener('click', () => {
         if (isSpinning || wheelItems.length === 0) return;
         
-        // Check date: restrict until April 15 (assuming 2026 based on context)
-        const currentDate = new Date();
-        const targetDate = new Date('2026-04-15T00:00:00');
-        
-        if (currentDate < targetDate) {
-            alert('⏳ วงล้อจะเปิดให้หมุนได้ในวันที่ 15 เมษายน เป็นต้นไปครับ!');
-            return;
-        }
+        /* Date restriction removed by user request */
         
         isSpinning = true;
         spinBtn.disabled = true;
