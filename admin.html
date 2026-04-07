@@ -49,6 +49,7 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            table-layout: fixed; /* Crucial for controlling column widths */
         }
         th, td {
             text-align: left;
@@ -96,6 +97,25 @@
         }
         .badge-won { background: #f1c40f; color: #fff; }
         .badge-pending { background: #3498db; color: #fff; }
+
+        /* Specific Mobile Refinement for Table */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .admin-container { padding: 15px; }
+            th, td { 
+                padding: 8px 4px; 
+                font-size: 0.75rem; 
+            }
+            /* Column width control for mobile */
+            th:nth-child(1), td:nth-child(1) { width: 35%; } /* Name */
+            th:nth-child(2), td:nth-child(2) { width: 25%; } /* Family */
+            th:nth-child(3), td:nth-child(3) { width: 15%; } /* Phone */
+            th:nth-child(4), td:nth-child(4) { width: 10%; text-align: center; } /* Status */
+            th:nth-child(5), td:nth-child(5) { width: 15%; text-align: center; } /* Action */
+            
+            .btn-danger { padding: 5px 8px; font-size: 0.7rem; }
+            .admin-header h2 { font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body>
