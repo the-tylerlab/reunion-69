@@ -13,6 +13,11 @@ const DATA_FILE = path.join(__dirname, 'data.json');
 // Serve static files from 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Admin Route
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 // Helper: Read Data
 function readData() {
     try {

@@ -1,11 +1,57 @@
 // State Management
-const STATE_KEY = 'reunion69_data';
-
-// Initialize data structure safely
+const socket = io();
 let appData = {
     participants: [],
     winners: []
 };
+
+// Listen to server for data sync
+socket.on('sync_data', (serverData) => {
+    appData = serverData;
+    renderLists();
+    if (canvas) drawWheel();
+});
+
+// Password Modal Helper
+function askPassword(msg, callback) {
+    const modal = document.getElementById('password-modal');
+    if (!modal) {
+        // Fallback if HTML not present
+        const p = prompt(msg);
+        callback(p);
+        return;
+    }
+    const msgEl = document.getElementById('password-modal-msg');
+    const input = document.getElementById('password-input');
+    const confirmBtn = document.getElementById('password-confirm-btn');
+    const cancelBtn = document.getElementById('password-cancel-btn');
+    
+    msgEl.textContent = msg;
+    input.value = '';
+    modal.classList.add('show');
+    input.style.borderColor = '#e2e8f0';
+    setTimeout(() => input.focus(), 100);
+    
+    // Clean old listeners
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+    
+    newConfirmBtn.addEventListener('click', () => {
+        modal.classList.remove('show');
+        callback(input.value);
+    });
+    
+    newCancelBtn.addEventListener('click', () => {
+        modal.classList.remove('show');
+        callback(null);
+    });
+    
+    input.onkeypress = (e) => {
+        if (e.key === 'Enter') newConfirmBtn.click();
+    };
+}
 
 // Colors for wheel wedges (Premium Palette)
 const colorPalette = [
@@ -32,9 +78,7 @@ const modalCloseBtn = document.getElementById('modal-close-btn');
 
 // --- Initialization ---
 function init() {
-    loadData();
     setupNavigation();
-    renderLists();
     
     // Check if fonts are loaded before drawing wheel to prevent layout issues
     if (canvas) {
@@ -63,33 +107,15 @@ function init() {
                 won: false
             };
             
-            appData.participants.unshift(newParticipant);
-            saveData();
-            renderLists();
-            if (canvas) drawWheel(); 
+            // Send to server instead of local storage
+            socket.emit('add_participant', newParticipant);
             
             form.reset();
             document.getElementById('name').focus();
         });
     }
 
-    // Clear data
-    const clearBtn = document.getElementById('clear-data-btn');
-    if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-            const pwd = prompt('🛑 โปรดใส่รหัสผ่าน Admin เพื่อลบข้อมูลทั้งหมด:');
-            if (pwd !== 'admin69') {
-                if (pwd !== null) alert('❌ รหัสผ่านไม่ถูกต้อง การลบข้อมูลล้มเหลว');
-                return;
-            }
-            if(confirm('กดยืนยันอีกครั้ง! คุณแน่ใจหรือไม่ที่จะล้างข้อมูลทั้งหมดจริงๆ?')) {
-                appData = { participants: [], winners: [] };
-                saveData();
-                renderLists();
-                if (canvas) drawWheel();
-            }
-        });
-    }
+    // Clear data logic moved exclusively to admin dashboard
 
     // Modal close
     if (modalCloseBtn) {
@@ -98,32 +124,6 @@ function init() {
             if (canvas) drawWheel(); 
         });
     }
-
-    // Storage Event Listener to sync tabs
-    window.addEventListener('storage', (e) => {
-        if (e.key === STATE_KEY) {
-            loadData();
-            renderLists();
-            if (canvas) drawWheel();
-        }
-    });
-}
-
-function loadData() {
-    const data = localStorage.getItem(STATE_KEY);
-    if (data) {
-        try {
-            appData = JSON.parse(data);
-            // Repair state if old schema
-            if (!appData.winners) appData.winners = [];
-        } catch (e) {
-            console.error('Error loading data', e);
-        }
-    }
-}
-
-function saveData() {
-    localStorage.setItem(STATE_KEY, JSON.stringify(appData));
 }
 
 // --- UI Rendering ---
@@ -144,7 +144,6 @@ function renderLists() {
                     <span class="p-family">สาย: ${p.familyLine}</span>
                     ${p.phone ? `<span class="p-phone"><i class="fa-solid fa-phone"></i> ${p.phone}</span>` : ''}
                 </div>
-                <button class="remove-btn" onclick="removeParticipant('${p.id}')" title="ลบรายชื่อ"><i class="fa-solid fa-xmark"></i></button>
             `;
             participantsList.appendChild(li);
         });
@@ -168,22 +167,7 @@ function renderLists() {
     }
 }
 
-// Global scope for removal capability within innerHTML
-window.removeParticipant = function(id) {
-    const pwd = prompt('🔒 รหัสผ่าน Admin สำหรับการลบรายชื่อ:');
-    if (pwd !== 'admin69') {
-        if (pwd !== null) alert('❌ รหัสผ่านไม่ถูกต้อง การลบข้อมูลล้มเหลว');
-        return;
-    }
-    if(confirm('ยืนยันตัวตนสำเร็จ! ต้องการลบรายชื่อนี้ใช่หรือไม่?')) {
-        appData.participants = appData.participants.filter(p => p.id !== id);
-        // Also remove from winners if present
-        appData.winners = appData.winners.filter(w => w.id !== id);
-        saveData();
-        renderLists();
-        if (canvas) drawWheel();
-    }
-}
+// Removal capability shifted to Admin Dashboard
 
 // --- Navigation Logic ---
 function setupNavigation() {
@@ -194,9 +178,16 @@ function setupNavigation() {
 
     if (btnNavToWheel && pageRegister && pageWheel) {
         btnNavToWheel.addEventListener('click', () => {
-            pageRegister.classList.remove('active');
-            pageWheel.classList.add('active');
-            if (canvas) drawWheel(); // Redraw
+            askPassword('🔒 กรุณาใส่รหัสผ่าน Admin สำหรับเข้าถึงวงล้อรางวัล:', (pwd) => {
+                if (pwd !== 'admin69') {
+                    if (pwd !== null) alert('❌ รหัสผ่านไม่ถูกต้อง ไม่สามารถเข้าถึงได้');
+                    return;
+                }
+                
+                pageRegister.classList.remove('active');
+                pageWheel.classList.add('active');
+                if (canvas) drawWheel(); // Redraw
+            });
         });
     }
 
@@ -312,6 +303,15 @@ if (spinBtn) {
     spinBtn.addEventListener('click', () => {
         if (isSpinning || wheelItems.length === 0) return;
         
+        // Check date: restrict until April 15 (assuming 2026 based on context)
+        const currentDate = new Date();
+        const targetDate = new Date('2026-04-15T00:00:00');
+        
+        if (currentDate < targetDate) {
+            alert('⏳ วงล้อจะเปิดให้หมุนได้ในวันที่ 15 เมษายน เป็นต้นไปครับ!');
+            return;
+        }
+        
         isSpinning = true;
         spinBtn.disabled = true;
         
@@ -345,18 +345,6 @@ function animateSpin() {
 function determineWinner() {
     cancelAnimationFrame(animationFrameId);
     
-    // The pointer is at the TOP (270 degrees or 1.5 PI in canvas terms)
-    // Canvas 0 radians is at 3 o'clock, increasing clockwise
-    // Wait, by default 0 is right. We draw counter/clockwise.
-    // Let's normalize rotation.
-    
-    // The top position corresponds to an angle of 3π/2 or 270 degrees.
-    // However, the wheel is rotated by 'currentRotation'.
-    // A slice i spans from `currentRotation + i*sliceAngle` to `currentRotation + (i+1)*sliceAngle`.
-    // We want the slice where:
-    // (currentRotation + i*sliceAngle) % 2π <= 3π/2 <= (currentRotation + (i+1)*sliceAngle) % 2π
-    
-    // A simpler way: The angle of the wedge corresponding to the pointer is calculated by moving backward from 3π/2 by currentRotation.
     const sliceAngle = (2 * Math.PI) / wheelItems.length;
     
     // Adjusting for the fact that pointer is at Top (Math.PI * 1.5)
@@ -371,15 +359,8 @@ function determineWinner() {
     if (winner) {
         showWinnerModal(winner);
         
-        // Find in main participants list and mark as won
-        const pIndex = appData.participants.findIndex(p => p.id === winner.id);
-        if (pIndex !== -1) {
-            appData.participants[pIndex].won = true;
-            // Add to winners list
-            appData.winners.unshift(appData.participants[pIndex]);
-            saveData();
-            renderLists();
-        }
+        // Send winner to server
+        socket.emit('set_winner', winner.id);
     }
 }
 

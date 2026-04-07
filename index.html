@@ -65,7 +65,7 @@
                         </div>
                         <div class="input-group">
                             <label for="family-line">สายตระกูล <span class="required">*</span></label>
-                            <input type="text" id="family-line" required placeholder="เช่น สายบ้านปู่ดำ หรือ นามสกุล">
+                            <input type="text" id="family-line" required placeholder="เช่น ตาบุญ-ยายจัด">
                         </div>
                         <div class="input-group">
                             <label for="phone">เบอร์โทรศัพท์ (เลือกกรอก)</label>
@@ -76,8 +76,7 @@
                 </div>
                 <div class="list-container">
                     <div class="list-header">
-                        <h3>รายชื่อผู้มาร่วมงาน (<span id="total-count">0</span> คน)</h3>
-                        <button id="clear-data-btn" class="btn-text" title="ล้างข้อมูลทั้งหมด"><i class="fa-solid fa-trash-can"></i></button>
+                        <h3>รายชื่อผู้มาร่วมงาน (<span id="total-count">0</span>)</h3>
                     </div>
                     <ul id="participants-list" class="data-list">
                         <!-- รายชื่อคนเข้างานจะสอดแทรกที่นี่ผ่าน JS -->
@@ -132,6 +131,20 @@
         </div>
     </div>
 
+    <!-- Password Modal -->
+    <div id="password-modal" class="modal-overlay" style="z-index: 9999; align-items: center; justify-content: center; background: rgba(0,0,0,0.6);">
+        <div class="modal-content glass-panel bounce-in" style="max-width: 400px; padding: 30px; text-align: center;">
+            <h3 style="margin-top:0; color: var(--text-color);"><i class="fa-solid fa-lock"></i> ยืนยันสิทธิ์ Admin</h3>
+            <p id="password-modal-msg" style="margin-bottom: 20px; color: var(--text-color); font-size: 1.1rem;">กรุณาใส่รหัสผ่าน</p>
+            <input type="password" id="password-input" placeholder="***" style="width: 100%; padding: 12px; margin-bottom: 25px; text-align: center; font-size: 1.5rem; letter-spacing: 5px; border-radius: 8px; border: 2px solid #e2e8f0; outline: none; transition: border-color 0.2s;">
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="password-cancel-btn" style="padding: 10px 25px; background: #e2e8f0; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; color: #475569; font-weight: 500;">ยกเลิก</button>
+                <button id="password-confirm-btn" class="btn-primary" style="padding: 10px 25px; border-radius: 8px; font-size: 1rem;">ยืนยัน</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการหลังบ้าน | รวมญาติ 69</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { padding: 40px 20px; background-color: var(--bg-color); }
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none; /* Hidden until password is provided */
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        .admin-header h2 { margin: 0; color: var(--text-color); font-size: 2rem; }
+        .data-tables {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+        }
+        @media (max-width: 900px) {
+            .data-tables { grid-template-columns: 1fr; }
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        th, td {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #333;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-won { background: #f1c40f; color: #fff; }
+        .badge-pending { background: #3498db; color: #fff; }
+    </style>
+</head>
+<body>
+    <div id="admin-panel" class="admin-container">
+        <div class="admin-header">
+            <h2><i class="fa-solid fa-user-shield" style="color: var(--primary-main)"></i> ระบบจัดการหลังบ้าน (Admin Dashboard)</h2>
+            <div>
+                <button id="admin-clear-data" class="btn-danger"><i class="fa-solid fa-triangle-exclamation"></i> ล้างข้อมูลรายชื่อทั้งหมด</button>
+            </div>
+        </div>
+        
+        <div class="data-tables">
+            <!-- All Participants -->
+            <div>
+                <h3 style="color: var(--text-color); font-size: 1.5rem; margin-bottom: 10px;">👥 ผู้เข้าร่วมงานทั้งหมด (<span id="admin-total-count">0</span>)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อ-นามสกุล</th>
+                            <th>สายตระกูล</th>
+                            <th>เบอร์โทร</th>
+                            <th>สถานะ</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-participants-table">
+                        <!-- Rendered by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Winners -->
+            <div>
+                <h3 style="color: var(--text-color); font-size: 1.5rem; margin-bottom: 10px;">🏆 ผู้รับรางวัลแล้ว (<span id="admin-winner-count">0</span>)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60%;">ชื่อ-นามสกุล</th>
+                            <th>สายตระกูล</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-winners-table">
+                        <!-- Rendered by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="password-modal" class="modal-overlay" style="z-index: 9999; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;">
+        <div class="modal-content glass-panel bounce-in" style="max-width: 400px; width: 100%; padding: 30px; text-align: center; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            <h3 style="margin-top:0; color: #333;"><i class="fa-solid fa-lock"></i> ยืนยันสิทธิ์ Admin</h3>
+            <p id="password-modal-msg" style="margin-bottom: 20px; color: #666; font-size: 1.1rem;">กรุณาใส่รหัสผ่าน</p>
+            <input type="password" id="password-input" placeholder="***" style="width: 100%; padding: 12px; margin-bottom: 25px; text-align: center; font-size: 1.5rem; letter-spacing: 5px; border-radius: 8px; border: 2px solid #e2e8f0; outline: none; transition: border-color 0.2s;">
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="password-cancel-btn" style="padding: 10px 25px; background: #e2e8f0; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; color: #475569; font-weight: 500;">ยกเลิก</button>
+                <button id="password-confirm-btn" class="btn-danger" style="padding: 10px 25px; border-radius: 8px; font-size: 1rem;">ยืนยัน</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
