@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงทะเบียนและวงล้อรวมญาติ 69</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        .wheel-dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            padding: 30px;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .wheel-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .page.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- PAGE 1: REGISTRATION -->
+    <div id="page-register" class="app-container glass-panel page active">
+        <header class="app-header">
+            <h1><i class="fa-solid fa-people-group"></i> รวมญาติ ๖๙</h1>
+            <p>จุดลงทะเบียนเข้าร่วมงาน</p>
+            <div style="margin-top: 15px; margin-bottom: 10px;">
+                <button id="nav-to-wheel" class="btn-primary" style="display: inline-block; width: auto; padding: 10px 25px; font-size: 1.1rem; border-radius: 50px; border: none; cursor: pointer;">
+                    <i class="fa-solid fa-dharmachakra"></i> ไปหน้ากระดานวงล้อรางวัล
+                </button>
+            </div>
+        </header>
+
+        <main class="app-content" style="padding-top: 10px;">
+            <section id="register-view" class="view active registration-grid" style="display: grid; grid-template-columns: 1fr 1fr !important; gap: 20px;">
+                <div class="form-container">
+                    <h2>เพิ่มรายชื่อเข้างาน</h2>
+                    <form id="registration-form">
+                        <div class="input-group">
+                            <label for="name">ชื่อ - นามสกุล <span class="required">*</span></label>
+                            <input type="text" id="name" required placeholder="เช่น สมหมาย ใจดี">
+                        </div>
+                        <div class="input-group">
+                            <label for="family-line">สายตระกูล <span class="required">*</span></label>
+                            <input type="text" id="family-line" required placeholder="เช่น สายบ้านปู่ดำ หรือ นามสกุล">
+                        </div>
+                        <div class="input-group">
+                            <label for="phone">เบอร์โทรศัพท์ (เลือกกรอก)</label>
+                            <input type="tel" id="phone" placeholder="08X-XXX-XXXX">
+                        </div>
+                        <button type="submit" class="btn-primary"><i class="fa-solid fa-save"></i> บันทึกข้อมูล</button>
+                    </form>
+                </div>
+                <div class="list-container">
+                    <div class="list-header">
+                        <h3>รายชื่อผู้มาร่วมงาน (<span id="total-count">0</span> คน)</h3>
+                        <button id="clear-data-btn" class="btn-text" title="ล้างข้อมูลทั้งหมด"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                    <ul id="participants-list" class="data-list">
+                        <!-- รายชื่อคนเข้างานจะสอดแทรกที่นี่ผ่าน JS -->
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- PAGE 2: WHEEL DASHBOARD -->
+    <div id="page-wheel" class="app-container glass-panel page" style="max-width: 1200px; margin-top: 5vh;">
+        <header class="app-header" style="padding-top: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 30px;">
+                <button id="nav-to-register" class="btn-primary" style="width: auto; padding: 10px 20px; font-size: 1rem; border-radius: 10px; background: rgba(0,0,0,0.1); color: var(--text-main); box-shadow: none; border: 1px solid rgba(0,0,0,0.1); cursor: pointer;">
+                    <i class="fa-solid fa-arrow-left"></i> กลับไปหน้าลงทะเบียน
+                </button>
+            </div>
+            <h1 class="wheel-main-title"><i class="fa-solid fa-dharmachakra"></i> วงล้อรางวัล</h1>
+        </header>
+
+        <main class="wheel-dashboard">
+            <!-- Wheel Section -->
+            <div class="wheel-container" style="background: none; border: none;">
+                <div class="wheel-wrapper wheel-responsive-wrapper">
+                    <!-- Triangle Pointer -->
+                    <div class="pointer"></div>
+                    <canvas id="wheel-canvas" width="600" height="600" style="max-width: 100%; height: auto;"></canvas>
+                </div>
+                <div class="wheel-controls">
+                    <button id="spin-btn" class="btn-spin" style="font-size: 2rem; padding: 20px 60px;">หมุนวงล้อ!</button>
+                </div>
+                <p class="wheel-info text-muted" style="font-size: 1.1rem; margin-top: 20px;">* เฉพาะผู้ยังไม่ได้รางวัล (<span id="eligible-count">0</span> ท่าน)</p>
+            </div>
+
+            <!-- Winners Section -->
+            <div class="winners-container" style="height: 100%; min-height: unset; max-height: 80vh;">
+                <h2>🏆 ทำเนียบผู้โชคดี</h2>
+                <ul id="winners-list" class="data-list winner-list-style" style="max-height: 500px;">
+                    <!-- รายชื่อผู้ชนะจะสอดแทรกที่นี่ผ่าน JS -->
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div id="winner-modal" class="modal-overlay">
+        <div class="modal-content glass-panel bounce-in" style="max-width: 600px;">
+            <h2 style="font-size: 3rem;">🎉 ยินดีด้วย! 🎉</h2>
+            <div class="winner-name-display" id="modal-winner-name" style="font-size: 3.5rem;">นาย สมหมาย ใจดี</div>
+            <div class="winner-family-display" id="modal-winner-family" style="font-size: 1.8rem; margin-bottom: 30px;">สายตระกูล: บ้านปู่ดำ</div>
+            <button id="modal-close-btn" class="btn-primary" style="font-size: 1.5rem; padding: 15px; cursor: pointer;">รับรางวัลและปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
