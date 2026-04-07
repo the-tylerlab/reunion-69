@@ -2,7 +2,7 @@
 const firebaseConfig = {
   apiKey: "AIzaSyArUTuBsE0K6HN-_X84pV3AspkJ31Llux8",
   authDomain: "reunion-69.firebaseapp.com",
-  databaseURL: "https://reunion-69-default-rtdb.firebaseio.com",
+  databaseURL: "https://reunion-69-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "reunion-69",
   storageBucket: "reunion-69.firebasestorage.app",
   messagingSenderId: "9929222848",
