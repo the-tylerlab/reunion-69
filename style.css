@@ -1,15 +1,17 @@
 /* CSS Variables & Reused Styles */
 :root {
-    --primary: #FF416C;
-    --primary-dark: #FF4B2B;
-    --secondary: #8e2de2;
-    --secondary-dark: #4a00e0;
+    /* Songkran Splashes & Floral Pinks */
+    --primary: #00c6ff; /* Water bright blue */
+    --primary-dark: #0072ff; /* Deep water */
+    --secondary: #ff0844; /* Floral pink/red */
+    --secondary-dark: #cc0033;
+    --accent: #f9d423; /* Summer yellow */
     --text-main: #2c3e50;
     --text-light: #f8f9fa;
     --text-muted: #6c757d;
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.4);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.85); /* Frosty wet glass */
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 10px 40px 0 rgba(0, 114, 255, 0.15); /* Blue tinted shadow */
     --success: #00b09b;
     --warning: #fbc2eb;
 }
@@ -55,7 +57,7 @@ body {
 .blob-1 {
     width: 600px;
     height: 600px;
-    background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+    background: linear-gradient(to right, #00c6ff 0%, #0072ff 100%); /* Water splash */
     top: -200px;
     left: -100px;
     animation-duration: 25s;
@@ -64,7 +66,7 @@ body {
 .blob-2 {
     width: 500px;
     height: 500px;
-    background: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 100%);
+    background: linear-gradient(to right, #f83600 0%, #f9d423 100%); /* Summer sun */
     bottom: -100px;
     right: -100px;
     animation-delay: -5s;
@@ -73,7 +75,7 @@ body {
 .blob-3 {
     width: 400px;
     height: 400px;
-    background: linear-gradient(to right, #ff9a9e 0%, #fecfef 100%);
+    background: linear-gradient(to right, #ff0844 0%, #ffb199 100%); /* Songkran Floral */
     top: 40%;
     left: 40%;
     animation-duration: 15s;
@@ -111,13 +113,26 @@ body {
     text-align: center;
 }
 
-.app-header h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    background: linear-gradient(to right, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.app-header .songkran-header {
+    line-height: 1.2;
     margin-bottom: 5px;
+}
+
+.songkran-header .main-title {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(to right, var(--primary), var(--primary-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 4px 15px rgba(0, 198, 255, 0.2);
+}
+
+.songkran-header .sub-title {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--secondary);
+    letter-spacing: 1px;
 }
 
 .app-header p {
