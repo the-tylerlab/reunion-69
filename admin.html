@@ -31,8 +31,39 @@
         .admin-header h2 { 
             margin: 0; 
             color: var(--text-color); 
-            font-size: clamp(1.2rem, 4vw, 2rem); 
+            font-size: clamp(1.8rem, 5vw, 2.8rem); 
+            line-height: 1.2;
         }
+        .admin-header h2 i { font-size: 0.9em; margin-right: 10px; }
+        .admin-header h2 span { font-size: 0.5em; display: block; margin-top: 5px; }
+
+        .sticky-wrapper {
+            position: sticky;
+            top: -40px; /* Offset body padding */
+            background: white;
+            z-index: 1000;
+            padding: 20px 40px;
+            margin: -40px -40px 30px;
+            border-bottom: 2px solid #f1f5f9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .stats-summary {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            flex: 1;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .stat-label { font-size: 0.9rem; color: #64748b; display: block; margin-bottom: 5px; }
+        .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--primary-dark); display: block; }
+
         .data-tables {
             display: grid;
             grid-template-columns: 1.5fr 1fr;
@@ -136,9 +167,13 @@
             th:nth-child(4), td:nth-child(4) { width: 13%; text-align: center; } /* Status */
             th:nth-child(5), td:nth-child(5) { width: 16%; text-align: center; } /* Action */
             
-            .admin-header h2 { font-size: 1rem; }
-            
-            /* Smaller Password Modal for mobile */
+            .admin-header h2 { font-size: 1.5rem; }
+            .admin-header h2 span { font-size: 0.6em; }
+            .sticky-wrapper { padding: 15px; margin: -10px -15px 20px; top: -10px; }
+            .stats-summary { gap: 10px; flex-wrap: wrap; }
+            .stat-card { padding: 10px; min-width: calc(50% - 5px); }
+            .stat-value { font-size: 1.8rem; }
+            .stat-card:last-child { min-width: 100%; }
             .modal-content {
                 padding: 20px !important;
                 max-width: 300px !important;
@@ -160,17 +195,35 @@
 </head>
 <body>
     <div id="admin-panel" class="admin-container">
-        <div class="admin-header">
-            <h2>
-                <i class="fa-solid fa-user-shield" style="color: var(--primary-dark)"></i> ระบบจัดการหลังบ้าน<br>
-                <span style="font-size: 0.8em; opacity: 0.8;">(Admin Dashboard)</span>
-            </h2>
-            <div>
-                <button id="admin-clear-data" class="btn-danger"><i class="fa-solid fa-triangle-exclamation"></i> ล้างข้อมูลรายชื่อทั้งหมด</button>
+        <div class="sticky-wrapper">
+            <div class="admin-header" style="border-bottom:none; margin-bottom:0; padding-bottom:10px;">
+                <h2>
+                    <i class="fa-solid fa-user-shield" style="color: var(--primary-dark)"></i> ระบบจัดการหลังบ้าน
+                    <span>(Admin Dashboard)</span>
+                </h2>
+                <div>
+                    <button id="admin-clear-data" class="btn-danger"><i class="fa-solid fa-triangle-exclamation"></i> ล้างข้อมูลทั้งหมด</button>
+                </div>
+            </div>
+
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <span class="stat-label">👥 ทั้งหมด</span>
+                    <span class="stat-value" id="summary-total">0</span>
+                </div>
+                <div class="stat-card" style="border-color: #f1c40f;">
+                    <span class="stat-label">🏆 ได้รางวัล</span>
+                    <span class="stat-value" id="summary-won" style="color: #f1c40f;">0</span>
+                </div>
+                <div class="stat-card" style="border-color: #3498db;">
+                    <span class="stat-label">⏳ รอลุ้น</span>
+                    <span class="stat-value" id="summary-pending" style="color: #3498db;">0</span>
+                </div>
             </div>
         </div>
         
         <div class="data-tables">
+
             <!-- All Participants -->
             <div>
                 <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">👥 ผู้เข้าร่วมงานทั้งหมด (<span id="admin-total-count">0</span>)</h3>

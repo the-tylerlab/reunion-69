@@ -102,6 +102,18 @@ function renderAdminTables(data) {
         participantsTbody.appendChild(tr);
     });
     totalCountSpan.textContent = data.participants.length;
+    winnerCountSpan.textContent = data.winners.length;
+
+    // Populate Stats Summary (Large numbers)
+    const summaryTotal = document.getElementById('summary-total');
+    const summaryWon = document.getElementById('summary-won');
+    const summaryPending = document.getElementById('summary-pending');
+    
+    if (summaryTotal) summaryTotal.textContent = data.participants.length;
+    if (summaryWon) summaryWon.textContent = data.winners.length;
+    if (summaryPending) {
+        summaryPending.textContent = data.participants.length - data.winners.length;
+    }
 
     // Render Winners
     winnersTbody.innerHTML = '';
