@@ -85,8 +85,8 @@ function renderAdminTables(data) {
     data.participants.forEach(p => {
         const tr = document.createElement('tr');
         const statusBadge = p.won 
-            ? '<span class="badge badge-won">✅ ได้รางวัลแล้ว</span>' 
-            : '<span class="badge badge-pending">⏳ รอลุ้น</span>';
+            ? '<span class="badge badge-won" title="ได้รางวัลแล้ว">✅</span>' 
+            : '<span class="badge badge-pending" title="ยังไม่ได้รางวัล">⏳</span>';
             
         tr.innerHTML = `
             <td><strong>${p.name}</strong></td>
