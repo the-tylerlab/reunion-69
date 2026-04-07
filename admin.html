@@ -52,14 +52,22 @@
         }
         th, td {
             text-align: left;
-            padding: 15px;
+            padding: 10px 12px;
             border-bottom: 1px solid #e2e8f0;
             color: #333;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px; /* Prevent extremely long text from breaking layout */
         }
         th {
             background-color: #f8fafc;
             font-weight: 600;
             color: #475569;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         tr:hover {
             background-color: #f1f5f9;
