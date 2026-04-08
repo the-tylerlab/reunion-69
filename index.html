@@ -29,9 +29,29 @@
         .page {
             display: none;
             animation: fadeIn 0.4s ease-out;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
         }
         .page.active {
             display: flex;
+        }
+        /* Global Footer Style */
+        .site-footer {
+            text-align: center;
+            padding: 10px 20px 25px; /* Further reduced padding */
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            width: 100%;
+            clear: both;
+            opacity: 0.8;
+            margin-top: 0; /* Removed top margin */
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
         }
     </style>
 </head>
@@ -57,7 +77,7 @@
             </div>
         </header>
 
-        <main class="app-content" style="padding-top: 10px;">
+        <main class="app-content" style="padding-top: 10px; width: 100%;">
             <section id="register-view" class="view active registration-grid">
                 <div class="form-container">
                     <h2>เพิ่มรายชื่อเข้างาน</h2>
@@ -84,11 +104,6 @@
                     <ul id="participants-list" class="data-list">
                         <!-- รายชื่อคนเข้างานจะสอดแทรกที่นี่ผ่าน JS -->
                     </ul>
-                    <!-- Footer Copyright moved internal to flow, below the list -->
-                    <footer style="text-align: center; padding: 20px 10px; color: var(--text-muted); font-size: 0.8rem; width: 100%; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 20px;">
-                        &copy; 2026 Designed for Family Reunion 69 <br>
-                        <span style="font-size: 0.7rem; opacity: 0.7;">by tan and the gang</span>
-                    </footer>
                 </div>
             </section>
         </main>
@@ -96,8 +111,8 @@
 
     <!-- PAGE 2: WHEEL DASHBOARD -->
     <div id="page-wheel" class="app-container glass-panel page" style="max-width: 1200px; margin-top: 5vh;">
-        <header class="app-header" style="padding-top: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 30px;">
+        <header class="app-header" style="padding-top: 15px; width: 100%;">
+            <div style="display: flex; justify-content: flex-start; align-items: center; padding: 0 15px; width: 100%;">
                 <button id="nav-to-register" class="btn-primary" style="width: auto; padding: 10px 20px; font-size: 1rem; border-radius: 10px; background: rgba(0,0,0,0.1); color: var(--text-main); box-shadow: none; border: 1px solid rgba(0,0,0,0.1); cursor: pointer;">
                     <i class="fa-solid fa-arrow-left"></i> กลับไปหน้าลงทะเบียน
                 </button>
@@ -125,13 +140,15 @@
                 <ul id="winners-list" class="data-list winner-list-style" style="max-height: 500px;">
                     <!-- รายชื่อผู้ชนะจะสอดแทรกที่นี่ผ่าน JS -->
                 </ul>
-                <footer style="text-align: center; padding: 20px 10px; color: var(--text-muted); font-size: 0.8rem; opacity: 0.8;">
-                    &copy; 2026 Designed for Family Reunion 69 <br>
-                    <span style="font-size: 0.7rem; opacity: 0.7;">by tan and the gang</span>
-                </footer>
             </div>
         </main>
     </div>
+
+    <!-- Global Footer outside app containers -->
+    <footer class="site-footer">
+        &copy; 2026 Designed for Family Reunion 69 <br>
+        <span style="font-size: 0.75rem; opacity: 0.7;">by tan and the gang</span>
+    </footer>
 
     <!-- Celebration Modal -->
     <div id="winner-modal" class="modal-overlay">

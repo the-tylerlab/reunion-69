@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        body { padding: 40px 20px; background-color: var(--bg-color); }
+        body { padding: 40px 20px; background-color: var(--bg-color); min-height: 100vh; display: flex; flex-direction: column; }
         .admin-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -19,6 +19,7 @@
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: none; /* Hidden until password is provided */
+            width: 100%;
         }
         .admin-header {
             display: flex;
@@ -89,7 +90,7 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            table-layout: fixed; /* Crucial for controlling column widths */
+            table-layout: fixed;
         }
         th, td {
             text-align: left;
@@ -100,7 +101,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 150px; /* Prevent extremely long text from breaking layout */
+            max-width: 150px;
         }
         th {
             background-color: #f8fafc;
@@ -110,9 +111,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        tr:hover {
-            background-color: #f1f5f9;
-        }
+        tr:hover { background-color: #f1f5f9; }
         .btn-danger {
             background: #e74c3c;
             color: white;
@@ -125,10 +124,7 @@
             transition: all 0.2s;
             font-size: 1rem;
         }
-        .btn-danger:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
+        .btn-danger:hover { background: #c0392b; transform: translateY(-2px); }
         .badge {
             padding: 4px 8px;
             border-radius: 20px;
@@ -140,75 +136,25 @@
         .badge-won { background: #f1c40f; color: #fff; }
         .badge-pending { background: #3498db; color: #fff; }
 
-        /* Specific Mobile Refinement for Table */
         @media (max-width: 600px) {
             body { padding: 10px; }
             .admin-container { padding: 15px; }
-            th, td { 
-                padding: 5px 2px; 
-                font-size: 0.65rem; 
-            }
-            /* Align Badge (Blue) and Button (Red) to be equal size */
-            .badge {
-                padding: 4px 8px; /* Balanced padding */
-                font-size: 0.65rem;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                min-width: 32px;
-                height: 22px;
-            }
-            .btn-danger { 
-                padding: 4px 8px; 
-                font-size: 0.65rem;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                height: 22px;
-                min-width: 32px;
-                border-radius: 20px; /* Make button more rounded like the badge */
-            }
-            .btn-danger i { font-size: 0.6rem; margin-right: 2px; }
+            th, td { padding: 5px 2px; font-size: 0.65rem; }
+            .badge { min-width: 32px; height: 22px; }
+            .btn-danger { height: 22px; min-width: 32px; border-radius: 20px; padding: 4px 8px; font-size: 0.65rem; }
             
-            /* Column width control for mobile */
-            th:nth-child(1), td:nth-child(1) { width: 32%; } /* Name */
-            th:nth-child(2), td:nth-child(2) { width: 22%; } /* Family */
-            th:nth-child(3), td:nth-child(3) { width: 17%; } /* Phone */
-            th:nth-child(4), td:nth-child(4) { width: 13%; text-align: center; } /* Status */
-            th:nth-child(5), td:nth-child(5) { width: 16%; text-align: center; } /* Action */
+            th:nth-child(1), td:nth-child(1) { width: 32%; }
+            th:nth-child(2), td:nth-child(2) { width: 22%; }
+            th:nth-child(3), td:nth-child(3) { width: 17%; }
+            th:nth-child(4), td:nth-child(4) { width: 13%; }
+            th:nth-child(5), td:nth-child(5) { width: 16%; }
             
             .admin-header h2 { font-size: 1.5rem; }
-            .admin-header h2 span { font-size: 0.75em; }
             .sticky-wrapper { padding: 15px; margin: -10px -15px 20px; top: -10px; }
             .stats-summary { gap: 10px; flex-wrap: wrap; }
             .stat-card { padding: 10px; min-width: calc(50% - 5px); }
             .stat-value { font-size: 1.8rem; }
             .stat-card:last-child { min-width: 100%; }
-            
-            .data-tables h3 { top: 180px; } /* Update sticky top for mobile */
-            
-            #admin-clear-data {
-                padding: 10px 15px;
-                font-size: 0.85rem;
-            }
-            .pagination-container { gap: 10px; }
-            .btn-page { padding: 6px 12px; font-size: 0.8rem; }
-            .modal-content {
-                padding: 20px !important;
-                max-width: 300px !important;
-            }
-            .modal-content h3 { font-size: 1.1rem !important; }
-            .modal-content p { font-size: 0.9rem !important; margin-bottom: 15px !important; }
-            #password-input { 
-                padding: 8px !important; 
-                font-size: 1.2rem !important; 
-                margin-bottom: 15px !important; 
-            }
-            #password-confirm-btn, #password-cancel-btn {
-                padding: 0 !important;
-                font-size: 0.9rem !important;
-                height: 40px !important; /* Slightly smaller height for mobile */
-            }
         }
 
         .pagination-container {
@@ -219,11 +165,6 @@
             margin-top: 20px;
             padding: 0 10px;
         }
-        #admin-page-info {
-            font-size: 0.9rem;
-            color: #64748b;
-            font-weight: 500;
-        }
         .btn-page {
             background: white;
             border: 1px solid #e2e8f0;
@@ -233,13 +174,19 @@
             font-size: 0.9rem;
             color: #475569;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .btn-page:hover:not(:disabled) { background: #f8fafc; border-color: #cbd5e1; }
-        .btn-page:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+        .btn-page:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .admin-footer {
+            text-align: center;
+            padding: 15px 20px 30px; /* Reduced top padding */
+            color: #64748b;
+            font-size: 0.85rem;
+            width: 100%;
+            margin-top: 10px; /* Reduced top margin */
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -272,8 +219,6 @@
         </div>
         
         <div class="data-tables">
-
-            <!-- All Participants -->
             <div>
                 <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">👥 ผู้เข้าร่วมงานทั้งหมด</h3>
                 <div class="table-container">
@@ -287,22 +232,18 @@
                                 <th>จัดการ</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-participants-table">
-                            <!-- จะเเสดงผลผ่าน JS -->
-                        </tbody>
+                        <tbody id="admin-participants-table"></tbody>
                     </table>
                 </div>
-                
                 <div class="pagination-container">
-                    <button id="admin-prev-page" class="btn-page" disabled><i class="fa-solid fa-chevron-left" style="font-size:0.7em;"></i> ก่อนหน้า</button>
+                    <button id="admin-prev-page" class="btn-page" disabled>ก่อนหน้า</button>
                     <span id="admin-page-info">หน้า 1 / 1</span>
-                    <button id="admin-next-page" class="btn-page" disabled>ถัดไป <i class="fa-solid fa-chevron-right" style="font-size:0.7em;"></i></button>
+                    <button id="admin-next-page" class="btn-page" disabled>ถัดไป</button>
                 </div>
             </div>
 
-            <!-- Winners -->
             <div>
-                <h2 style="display:none;"><span id="admin-total-count">0</span><span id="admin-winner-count">0</span></h2> <!-- Hidden but kept for JS compatibility -->
+                <h2 style="display:none;"><span id="admin-total-count">0</span><span id="admin-winner-count">0</span></h2>
                 <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">🏆 ผู้รับรางวัลแล้ว</h3>
                 <table>
                     <thead>
@@ -311,19 +252,16 @@
                             <th>สายตระกูล</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-winners-table">
-                        <!-- Rendered by JS -->
-                    </tbody>
+                    <tbody id="admin-winners-table"></tbody>
                 </table>
             </div>
         </div>
-
-        <!-- Footer Copyright inside flow -->
-        <footer style="text-align: center; padding: 30px 20px; color: #64748b; font-size: 0.85rem; border-top: 1px solid #e2e8f0; margin-top: 30px;">
-            &copy; 2026 Designed for Family Reunion 69 <br>
-            <span style="font-size: 0.75rem; opacity: 0.7;">by tan and the gang</span>
-        </footer>
     </div>
+
+    <footer class="admin-footer">
+        &copy; 2026 Designed for Family Reunion 69 <br>
+        <span style="font-size: 0.75rem; opacity: 0.7;">by tan and the gang</span>
+    </footer>
 
     <!-- Password Modal -->
     <div id="password-modal" class="modal-overlay" style="z-index: 9999; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;">
@@ -338,7 +276,6 @@
         </div>
     </div>
 
-</body>
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-database-compat.js"></script>
     <script src="admin.js"></script>
