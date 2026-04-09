@@ -115,7 +115,7 @@ function renderAdminTables(data) {
             <td class="mobile-hide">${p.phone || '-'}</td>
             <td>${statusBadge}</td>
             <td>
-                <button class="btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="adminRemove('${p.id}')">
+                <button class="btn-danger" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="adminRemove('${p.id}')">
                     <i class="fa-solid fa-trash"></i> ลบ
                 </button>
             </td>
