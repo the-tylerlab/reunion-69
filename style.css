@@ -40,11 +40,11 @@ html {
 
 body {
     background-color: #f6f8fd;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden;
+    overflow: hidden; /* Avoid global scrollbars on large screens */
     position: relative;
     color: var(--text-main);
 }
@@ -116,11 +116,12 @@ body {
 .app-container {
     width: 95%;
     max-width: 900px;
-    min-height: 80vh;
+    height: auto; /* Hug content to allow centering */
+    max-height: 92vh; /* Respect viewport limits */
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    margin: 20px 0;
+    margin: 20px auto; /* Margin auto helps with centering */
 }
 
 .app-header {
@@ -140,7 +141,7 @@ body {
 .app-header p {
     color: var(--text-muted);
     font-size: 1.1rem;
-    margin-bottom: 25px;
+    margin-bottom: 10px; /* Reduced from 25px */
 }
 
 /* Tabs */
@@ -181,8 +182,10 @@ body {
 /* Views */
 .app-content {
     flex: 1;
-    padding: 30px;
+    padding: 10px 30px; /* Further reduced vertical padding */
     position: relative;
+    overflow-y: auto; /* Internal scroll if content too tall */
+    min-height: 0;
 }
 
 .view {
@@ -214,9 +217,52 @@ body {
     gap: 30px;
 }
 
-@media (max-width: 600px) {
+.wheel-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 10px 20px 20px;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 500px) {
+    body {
+        height: auto;
+        overflow-y: auto;
+    }
+    .app-container {
+        height: auto;
+        min-height: auto;
+        max-height: none;
+        margin: 5px 0;
+        padding: 5px;
+    }
     .registration-grid, .wheel-dashboard {
         grid-template-columns: 1fr !important;
+        gap: 15px;
+        padding: 10px !important;
+    }
+    .winners-container {
+        display: none !important; /* Hide on mobile as requested */
+    }
+    .wheel-container {
+        padding: 10px !important;
+        margin-bottom: 0;
+    }
+    /* Balanced Mobile Proportions - Larger Wheel, Smaller Button */
+    .wheel-wrapper {
+        width: 280px !important; 
+        height: 280px !important;
+        margin-bottom: 10px !important;
+    }
+    .btn-spin {
+        padding: 5px 15px !important;
+        font-size: 0.9rem !important;
+        border-radius: 40px !important;
+        margin-top: 5px !important;
     }
 }
 
@@ -270,10 +316,11 @@ body {
 }
 
 .form-container, .list-container, .wheel-container, .winners-container {
-    background: rgba(255, 255, 255, 0.5);
-    padding: 25px;
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 20px;
     border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 h2, h3 {
@@ -283,7 +330,7 @@ h2, h3 {
 
 /* Form Styles */
 .input-group {
-    margin-bottom: 18px;
+    margin-bottom: 12px; /* Reduced from 18px */
     text-align: left;
 }
 
@@ -300,7 +347,7 @@ h2, h3 {
 
 input[type="text"], input[type="tel"] {
     width: 100%;
-    padding: 12px 15px;
+    padding: 10px 15px; /* Reduced from 12px */
     border: 1px solid #ced4da;
     border-radius: 10px;
     font-size: 1rem;
@@ -361,9 +408,10 @@ input[type="text"]:focus, input[type="tel"]:focus {
 
 .data-list {
     list-style: none;
-    max-height: 300px;
+    flex: 1;
     overflow-y: auto;
     padding-right: 5px;
+    min-height: 0; /* Critical for flex parents */
 }
 
 /* Scrollbar customization */
@@ -403,19 +451,22 @@ input[type="text"]:focus, input[type="tel"]:focus {
 }
 
 .wheel-wrapper {
+    width: clamp(200px, 48vh, 380px); /* Larger wheel for desktop */
+    height: clamp(200px, 48vh, 380px);
+    margin: 0 auto 10px;
     position: relative;
-    width: 100%;
-    max-width: 450px;
-    aspect-ratio: 1/1;
-    margin-bottom: 30px;
-    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.15));
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0,0,0,0.08); /* Minimal shadow */
+    background: #fff;
+    padding: 2px; /* Ultra-thin border as requested */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 #wheel-canvas {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 8px solid white;
+    border: 2px solid white; /* Thin border as requested */
     transform: rotate(0deg); /* Will be manipulated via JS */
 }
 
@@ -446,16 +497,16 @@ input[type="text"]:focus, input[type="tel"]:focus {
 }
 
 .btn-spin {
-    padding: 15px 50px;
-    font-size: 1.5rem;
-    font-weight: 700;
-    border: none;
-    border-radius: 50px;
-    background: linear-gradient(to right, #00b09b, #96c93d);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
+    border: none;
+    padding: 8px 25px;
+    font-size: 1.1rem;
+    border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 5px 20px rgba(0, 176, 155, 0.4);
-    transition: all 0.2s;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-transform: uppercase;
     letter-spacing: 1px;
 }

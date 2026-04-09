@@ -10,16 +10,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        body { padding: 40px 20px; background-color: var(--bg-color); min-height: 100vh; display: flex; flex-direction: column; }
+        body { padding: 20px; background-color: var(--bg-color); height: 100vh; display: flex; flex-direction: column; overflow: hidden; align-items: center; justify-content: center; }
         .admin-container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 1400px;
+            height: clamp(600px, 95vh, 1000px);
             background: var(--card-bg);
             border-radius: 15px;
-            padding: 40px;
+            padding: 0 40px 40px; /* Top padding handled by sticky wrapper margin */
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: none; /* Hidden until password is provided */
-            width: 100%;
+            width: 98%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         .admin-header {
             display: flex;
@@ -39,14 +42,14 @@
         .admin-header h2 span { font-size: 0.6em; font-weight: 500; display: block; margin-top: 5px; color: var(--primary-dark); opacity: 0.8; }
 
         .sticky-wrapper {
-            position: sticky;
-            top: -40px; /* Offset body padding */
+            position: relative; /* Changed from sticky within the new fixed-height container context */
+            top: 0;
             background: white;
             z-index: 1000;
-            padding: 20px 40px;
-            margin: -40px -40px 30px;
+            padding: 20px 0;
+            margin: 0;
             border-bottom: 2px solid #f1f5f9;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            flex-shrink: 0;
         }
 
         .stats-summary {
@@ -67,7 +70,7 @@
 
         .data-tables h3 {
             position: sticky;
-            top: 180px; /* Approximate height of sticky-wrapper */
+            top: 0;
             background: white;
             padding: 10px 0;
             z-index: 10;
@@ -78,8 +81,12 @@
             display: grid;
             grid-template-columns: 1.5fr 1fr;
             gap: 40px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 5px 20px 0;
+            min-height: 0;
         }
-        @media (max-width: 900px) {
+        @media (max-width: 500px) {
             .data-tables { grid-template-columns: 1fr; }
         }
         table {
@@ -220,7 +227,7 @@
         
         <div class="data-tables">
             <div>
-                <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">👥 ผู้เข้าร่วมงานทั้งหมด</h3>
+                <h3 style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 10px;">👥 รายชื่อแขกทั้งหมด</h3>
                 <div class="table-container">
                     <table style="margin-top:0;">
                         <thead>

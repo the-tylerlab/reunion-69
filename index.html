@@ -16,14 +16,29 @@
     <style>
         .wheel-dashboard {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Equal split for balanced look */
-            gap: 50px;
-            padding: 30px 40px;
-            align-items: start;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(15px, 4vw, 50px); /* Responsive Breakpoints */
         }
-        @media (max-width: 600px) {
-            .wheel-dashboard {
-                grid-template-columns: 1fr;
+        @media (max-width: 500px) {
+            body {
+                height: auto;
+                overflow-y: auto;
+            }
+            .app-container {
+                height: auto;
+                min-height: auto;
+                max-height: none;
+                margin: 5px 0;
+                padding: 5px;
+            }
+            .registration-grid, .wheel-dashboard {
+                grid-template-columns: 1fr !important;
+                gap: 15px;
+                padding: 10px !important;
+            }
+            .wheel-container, .winners-container {
+                padding: 15px !important;
+                margin-bottom: 15px;
             }
         }
         .page {
@@ -36,6 +51,24 @@
         .page.active {
             display: flex;
         }
+        .wheel-wrapper {
+            width: clamp(200px, 42vh, 340px);
+            height: clamp(200px, 42vh, 340px);
+            margin: 0 auto 10px;
+            position: relative;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Lighter shadow */
+            background: #fff;
+            padding: 3px; /* Thin border as requested */
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .app-content {
+            flex: 1;
+            padding: 10px 30px; 
+            position: relative;
+            overflow: hidden; /* Prevent parent from scrolling */
+            min-height: 0;
+        }
         /* Global Footer Style */
         .site-footer {
             text-align: center;
@@ -47,11 +80,47 @@
             opacity: 0.8;
             margin-top: 0; /* Removed top margin */
         }
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
+        @media (min-width: 501px) {
+            body {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                margin: 0;
+                overflow-y: auto; 
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        @media (max-width: 500px) {
+            body {
+                display: block;
+                height: auto;
+                overflow-y: auto;
+                padding: 10px;
+            }
+            .app-container {
+                height: auto;
+                max-height: none;
+                margin: 10px auto;
+                padding: 5px; /* Standardize padding */
+            }
+        }
+        #page-register.active, #page-wheel.active {
+            display: flex !important;
+        }
+        .btn-spin {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 40px; /* Reduced padding from 18px 50px */
+            font-size: 1.4rem; /* Reduced from 1.6rem */
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -64,23 +133,23 @@
 
     <!-- PAGE 1: REGISTRATION -->
     <div id="page-register" class="app-container glass-panel page active">
-        <header class="app-header">
-            <h1 style="line-height: 1.1; margin-bottom: 10px;">
-                <span style="font-size: 3.5rem;">🔫</span> รวมญาติ 2569 💦<br>
-                <span style="font-size: 1.5rem; font-weight: 500; color: var(--primary-dark); -webkit-text-fill-color: var(--primary-dark); text-shadow: 2px 2px 0 #fff;">พ่อแก่สี - แม่แก่จัน - แม่แก่ขวิด</span>
+        <header class="app-header" style="padding: 15px 20px 0;"> <!-- Reduced top padding -->
+            <h1 style="line-height: 1.1; margin-bottom: 5px;">
+                <span style="font-size: 2.5rem;">🔫</span> รวมญาติ 2569 💦<br>
+                <span style="font-size: 1.2rem; font-weight: 500; color: var(--primary-dark); -webkit-text-fill-color: var(--primary-dark); text-shadow: 1px 1px 0 #fff;">พ่อแก่สี - แม่แก่จัน - แม่แก่ขวิด</span>
             </h1>
-            <p>จุดลงทะเบียนเข้าร่วมงาน</p>
-            <div style="margin-top: 15px; margin-bottom: 10px;">
-                <button id="nav-to-wheel" class="btn-primary" style="display: inline-block; width: auto; padding: 10px 25px; font-size: 1.1rem; border-radius: 50px; border: none; cursor: pointer;">
+            <p style="margin-bottom: 10px; font-size: 1rem;">จุดลงทะเบียนเข้าร่วมงาน</p> <!-- Reduced margin and size -->
+            <div style="margin-top: 10px; margin-bottom: 5px;">
+                <button id="nav-to-wheel" class="btn-primary" style="display: inline-block; width: auto; padding: 8px 20px; font-size: 1rem; border-radius: 50px; border: none; cursor: pointer;">
                     <i class="fa-solid fa-dharmachakra"></i> ไปหน้ากระดานวงล้อรางวัล
                 </button>
             </div>
         </header>
 
-        <main class="app-content" style="padding-top: 10px; width: 100%;">
-            <section id="register-view" class="view active registration-grid">
-                <div class="form-container">
-                    <h2>เพิ่มรายชื่อเข้างาน</h2>
+        <main class="app-content" style="padding: 10px 30px; width: 100%; flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <section id="register-view" class="view active registration-grid" style="height: 100%; min-height: 0; overflow: hidden;">
+                <div class="form-container" style="display: flex; flex-direction: column;">
+                    <h2 style="margin-bottom: 20px;">ลงทะเบียนเข้าร่วมงาน</h2>
                     <form id="registration-form">
                         <div class="input-group">
                             <label for="name">ชื่อ - นามสกุล <span class="required">*</span></label>
@@ -97,9 +166,9 @@
                         <button type="submit" class="btn-primary"><i class="fa-solid fa-save"></i> บันทึกข้อมูล</button>
                     </form>
                 </div>
-                <div class="list-container">
-                    <div class="list-header">
-                        <h3>รายชื่อผู้มาร่วมงาน (<span id="total-count">0</span>)</h3>
+                <div class="list-container" style="display: flex; flex-direction: column; min-height: 0;">
+                    <div class="list-header" style="flex-shrink: 0;">
+                        <h2 style="margin-bottom: 20px;">รายชื่อแขก (<span id="total-count">0</span>)</h2>
                     </div>
                     <ul id="participants-list" class="data-list">
                         <!-- รายชื่อคนเข้างานจะสอดแทรกที่นี่ผ่าน JS -->
@@ -110,34 +179,36 @@
     </div>
 
     <!-- PAGE 2: WHEEL DASHBOARD -->
-    <div id="page-wheel" class="app-container glass-panel page" style="max-width: 1200px; margin-top: 5vh;">
-        <header class="app-header" style="padding-top: 15px; width: 100%;">
-            <div style="display: flex; justify-content: flex-start; align-items: center; padding: 0 15px; width: 100%;">
-                <button id="nav-to-register" class="btn-primary" style="width: auto; padding: 10px 20px; font-size: 1rem; border-radius: 10px; background: rgba(0,0,0,0.1); color: var(--text-main); box-shadow: none; border: 1px solid rgba(0,0,0,0.1); cursor: pointer;">
+    <div id="page-wheel" class="app-container glass-panel page" style="max-width: 1210px; height: auto; max-height: 92vh; margin: auto; width: 98%; display: none;">
+        <header class="app-header" style="padding-top: 15px; padding-bottom: 5px; width: 100%; flex-shrink: 0;">
+            <div style="display: flex; justify-content: flex-start; align-items: center; padding: 0 20px; width: 100%; max-width: 1210px; margin: 0 auto;"> <!-- Precise alignment to match cards -->
+                <button id="nav-to-register" class="btn-primary" style="width: auto; padding: 8px 18px; font-size: 0.9rem; border-radius: 10px; background: rgba(0,0,0,0.08); color: var(--text-main); box-shadow: none; border: 1px solid rgba(0,0,0,0.1); cursor: pointer;">
                     <i class="fa-solid fa-arrow-left"></i> กลับไปหน้าลงทะเบียน
                 </button>
             </div>
-            <h1 class="wheel-main-title"><i class="fa-solid fa-dharmachakra"></i> วงล้อรางวัล</h1>
         </header>
 
-        <main class="wheel-dashboard">
+        <main class="wheel-dashboard" style="overflow: hidden; flex: 1; min-height: 0; width: 100%; display: grid; padding: 5px 20px 20px;">
             <!-- Wheel Section -->
-            <div class="wheel-container" style="background: none; border: none;">
+            <div class="wheel-container glass-panel" style="display: flex; flex-direction: column; height: 100%; min-height: 0; padding: 12px; position: relative;">
+                <h2 style="color: var(--text-color); margin-bottom: 12px; font-size: 1.7rem; text-align: center;">วงล้อรางวัล</h2>
                 <div class="wheel-wrapper wheel-responsive-wrapper">
                     <!-- Triangle Pointer -->
                     <div class="pointer"></div>
                     <canvas id="wheel-canvas" width="600" height="600" style="max-width: 100%; height: auto;"></canvas>
                 </div>
-                <div class="wheel-controls">
-                    <button id="spin-btn" class="btn-spin" style="font-size: 2rem; padding: 20px 60px;">หมุนวงล้อ!</button>
+                <div class="wheel-controls" style="margin-top: 15px; text-align: center;">
+                    <button id="spin-btn" class="btn-spin">หมุนวงล้อ!</button>
                 </div>
-                <p class="wheel-info text-muted" style="font-size: 1.1rem; margin-top: 20px;">* เฉพาะผู้ยังไม่ได้รางวัล (<span id="eligible-count">0</span> ท่าน)</p>
+                <p class="wheel-info text-muted" style="font-size: 1.1rem; margin-top: 25px; text-align: center; font-weight: 500;">
+                    * ผู้ยังไม่ได้รางวัล (<span id="eligible-count">0</span> ท่าน)
+                </p>
             </div>
 
             <!-- Winners Section -->
-            <div class="winners-container" style="height: 100%; min-height: unset; max-height: 80vh;">
-                <h2>🏆 ทำเนียบผู้โชคดี</h2>
-                <ul id="winners-list" class="data-list winner-list-style" style="max-height: 500px;">
+            <div class="winners-container glass-panel" style="display: flex; flex-direction: column; height: 100%; min-height: 0; padding: 12px;"> <!-- Tighter padding 12px -->
+                <h2 style="color: var(--text-color); margin-bottom: 12px; font-size: 1.25rem; text-align: center; flex-shrink: 0;">🏆 ทำเนียบผู้โชคดี</h2>
+                <ul id="winners-list" class="data-list winner-list-style">
                     <!-- รายชื่อผู้ชนะจะสอดแทรกที่นี่ผ่าน JS -->
                 </ul>
             </div>
