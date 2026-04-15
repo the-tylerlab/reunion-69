@@ -133,6 +133,26 @@ function init() {
                 return currentData;
             });
             
+            // Visual Effect for Success
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.8 },
+                colors: ['#10b981', '#34d399', '#ffffff']
+            });
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> บันทึกสำเร็จ!';
+            submitBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            submitBtn.style.transform = 'scale(1.05)';
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.background = '';
+                submitBtn.style.transform = '';
+            }, 2000);
+
             form.reset();
             document.getElementById('nickname').focus();
         });
