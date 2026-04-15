@@ -113,17 +113,15 @@ function init() {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             
+            const nickname = document.getElementById('nickname').value.trim();
             const name = document.getElementById('name').value.trim();
-            const familyLine = document.getElementById('family-line').value.trim();
-            const phone = document.getElementById('phone').value.trim();
             
-            if (!name || !familyLine) return;
+            if (!nickname || !name) return;
             
             const newParticipant = {
                 id: Date.now().toString(),
+                nickname,
                 name,
-                familyLine,
-                phone,
                 won: false
             };
             
@@ -136,7 +134,7 @@ function init() {
             });
             
             form.reset();
-            document.getElementById('name').focus();
+            document.getElementById('nickname').focus();
         });
     }
 
@@ -158,16 +156,16 @@ function renderLists() {
     if (participantsList) {
         participantsList.innerHTML = '';
         
-        appData.participants.forEach((p, index) => {
+        const reversedParticipants = [...appData.participants].reverse();
+        reversedParticipants.forEach((p, index) => {
             const li = document.createElement('li');
             // If won, make it slightly opaque in the main list
             if(p.won) li.style.opacity = '0.6';
             
             li.innerHTML = `
                 <div class="participant-info">
-                    <span class="p-name">${p.name} ${p.won ? '🎯 (ได้รางวัลแล้ว)' : ''}</span>
-                    <span class="p-family">สาย: ${p.familyLine}</span>
-                    ${p.phone ? `<span class="p-phone"><i class="fa-solid fa-phone"></i> ${p.phone}</span>` : ''}
+                    <span class="p-name">${p.nickname} ${p.won ? '🎯 (ได้รางวัลแล้ว)' : ''}</span>
+                    <span class="p-family">ชื่อจริง-นามสกุล: ${p.name}</span>
                 </div>
             `;
             participantsList.appendChild(li);
@@ -179,12 +177,13 @@ function renderLists() {
     // Render Winners
     if (winnersList) {
         winnersList.innerHTML = '';
-        appData.winners.forEach((w, i) => {
+        const reversedWinners = [...appData.winners].reverse();
+        reversedWinners.forEach((w, i) => {
             const li = document.createElement('li');
             li.innerHTML = `
                 <div class="participant-info">
-                    <span class="p-name">🏆 ${w.name}</span>
-                    <span class="p-family">สาย: ${w.familyLine}</span>
+                    <span class="p-name">🏆 ${w.nickname}</span>
+                    <span class="p-family">ชื่อจริง-นามสกุล: ${w.name}</span>
                 </div>
             `;
             winnersList.appendChild(li);
@@ -393,8 +392,8 @@ function determineWinner() {
 }
 
 function showWinnerModal(winner) {
-    modalWinnerName.textContent = winner.name;
-    modalWinnerFamily.textContent = `สายตระกูล: ${winner.familyLine}`;
+    modalWinnerName.textContent = winner.nickname;
+    modalWinnerFamily.textContent = `ชื่อจริง-นามสกุล: ${winner.name}`;
     modal.classList.add('show');
     
     // Confetti effect

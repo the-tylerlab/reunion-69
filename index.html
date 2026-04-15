@@ -152,16 +152,12 @@
                     <h2 style="margin-bottom: 20px;">ลงทะเบียนเข้าร่วมงาน</h2>
                     <form id="registration-form">
                         <div class="input-group">
-                            <label for="name">ชื่อ - นามสกุล <span class="required">*</span></label>
+                            <label for="nickname">ชื่อเล่น <span class="required">*</span></label>
+                            <input type="text" id="nickname" required placeholder="เช่น สมหมาย">
+                        </div>
+                        <div class="input-group">
+                            <label for="name">ชื่อจริง-นามสกุล <span class="required">*</span></label>
                             <input type="text" id="name" required placeholder="เช่น สมหมาย ใจดี">
-                        </div>
-                        <div class="input-group">
-                            <label for="family-line">สายตระกูล <span class="required">*</span></label>
-                            <input type="text" id="family-line" required placeholder="เช่น ตาบุญ-ยายจัด">
-                        </div>
-                        <div class="input-group">
-                            <label for="phone">เบอร์โทรศัพท์ (เลือกกรอก)</label>
-                            <input type="tel" id="phone" placeholder="08X-XXX-XXXX">
                         </div>
                         <button type="submit" class="btn-primary"><i class="fa-solid fa-save"></i> บันทึกข้อมูล</button>
                     </form>

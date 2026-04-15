@@ -176,10 +176,10 @@
             .stat-label { font-size: 0.7rem; margin-bottom: 2px; }
 
             /* Hide extra columns on very small displays for readability */
-            th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3) { display: none; }
+            th:nth-child(2), td:nth-child(2) { display: none; }
             th:nth-child(1), td:nth-child(1) { width: 45%; }
-            th:nth-child(4), td:nth-child(4) { width: 25%; }
-            th:nth-child(5), td:nth-child(5) { width: 30%; }
+            th:nth-child(3), td:nth-child(3) { width: 25%; }
+            th:nth-child(4), td:nth-child(4) { width: 30%; }
             
             .pagination-container { gap: 10px; padding: 10px 0; }
             .btn-page { padding: 6px 12px; font-size: 0.8rem; }
@@ -284,9 +284,8 @@
                     <table style="margin-top:0;">
                         <thead>
                             <tr>
-                                <th>ชื่อ-นามสกุล</th>
-                                <th>สายตระกูล</th>
-                                <th class="mobile-hide">เบอร์โทร</th>
+                                <th>ชื่อจริง-นามสกุล</th>
+                                <th>ชื่อเล่น</th>
                                 <th>สถานะ</th>
                                 <th>จัดการ</th>
                             </tr>
@@ -307,8 +306,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 60%;">ชื่อ-นามสกุล</th>
-                            <th>สายตระกูล</th>
+                            <th style="width: 60%;">ชื่อจริง-นามสกุล</th>
+                            <th>ชื่อเล่น</th>
                         </tr>
                     </thead>
                     <tbody id="admin-winners-table"></tbody>

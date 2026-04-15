@@ -100,8 +100,9 @@ function renderAdminTables(data) {
 
     // Render Participants (Sliced for pagination)
     participantsTbody.innerHTML = '';
+    const reversedParticipants = [...data.participants].reverse();
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const pagedParticipants = data.participants.slice(startIndex, startIndex + itemsPerPage);
+    const pagedParticipants = reversedParticipants.slice(startIndex, startIndex + itemsPerPage);
 
     pagedParticipants.forEach(p => {
         const tr = document.createElement('tr');
@@ -111,8 +112,7 @@ function renderAdminTables(data) {
             
         tr.innerHTML = `
             <td><strong>${p.name}</strong></td>
-            <td>${p.familyLine}</td>
-            <td class="mobile-hide">${p.phone || '-'}</td>
+            <td>${p.nickname || '-'}</td>
             <td>${statusBadge}</td>
             <td>
                 <button class="btn-danger" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="adminRemove('${p.id}')">
@@ -138,11 +138,12 @@ function renderAdminTables(data) {
 
     // Render Winners
     winnersTbody.innerHTML = '';
-    data.winners.forEach(w => {
+    const reversedWinners = [...data.winners].reverse();
+    reversedWinners.forEach(w => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><strong>${w.name}</strong></td>
-            <td>${w.familyLine}</td>
+            <td>${w.nickname || '-'}</td>
         `;
         winnersTbody.appendChild(tr);
     });
